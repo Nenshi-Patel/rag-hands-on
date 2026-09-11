@@ -61,8 +61,8 @@ your question ──────────────► embedding ──► 
 **1. Clone the repository**
 
 ```bash
-git clone <your-repo-url>
-cd AI-Project
+git clone https://github.com/Nenshi-Patel/health-trace-chatbot.git
+cd health-trace-chatbot
 ```
 
 **2. Create a virtual environment** (Python 3.12)
