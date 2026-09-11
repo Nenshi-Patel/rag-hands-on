@@ -12,12 +12,13 @@ It handles PDFs, Word files, slides, plain text and pictures. Scanned reports wi
 
 ## ✨ Features
 
+* **Attach with the paperclip** — upload straight from the chat box, one file or several
 * **Many file types** — pdf, docx, pptx, txt, png, jpg, jpeg
 * **Reads scans and photos** — a page with no text layer is turned into a picture and read by the AI
 * **Ask by voice** — a microphone sits inside the chat box
 * **Remembers the chat** — follow-up questions like "and the other one?" work
 * **Any language** — ask in Gujarati or Hindi about an English document, and get the answer back in your language
-* **Always-on documents** — files in `documents/` are loaded at startup and never shown to the user
+* **Always-on documents** — an optional file in `documents/` is loaded at startup, on top of anything you attach
 * **Answers from many files at once** — an image and a PDF are searched together
 * **Pays once per file** — reading and embedding are cached, so asking again is free
 
@@ -117,11 +118,21 @@ Each section lists the foods to eat, the amounts, what blocks absorption, and wh
 * *What should I avoid with high uric acid?*
 * *મારે આયર્ન વધારવા શું ખાવું જોઈએ?*
 
-Swap the file for your own, or add more beside it. Anything in `documents/` is loaded
-at startup and searched with every question, and its name is never shown on screen.
+---
 
-> **Restart the app after changing this folder.** It is read once per session, so a
-> browser refresh is not enough.
+## 📎 Adding your own documents
+
+**Normal way — the paperclip.** Click the `+` in the chat box and pick a file, then ask your
+question. Attach several at once if you like. They stay for the whole conversation, so you
+attach once and keep asking. Uploads live in memory only and are never written to disk.
+
+**Optional — the `documents/` folder.** A file placed here is loaded when the app starts and
+searched with every question, on top of whatever you attach. Its name is never shown, so the
+bot simply seems to know the subject. This is where the diet guide above lives. Most people
+never need to touch it.
+
+> **Restart the app after changing that folder.** It is read once per session, so a browser
+> refresh is not enough. The paperclip needs no restart.
 
 ---
 
