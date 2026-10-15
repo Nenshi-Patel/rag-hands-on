@@ -6,6 +6,11 @@ langchain-text-splitters
 faiss-cpu
 python-dotenv
 
+# Hybrid search (gpo_annual_report.py).
+# rank_bm25 powers keyword search. langchain-classic holds EnsembleRetriever.
+rank_bm25
+langchain-classic
+
 # Document reading.
 # pypdf handles PDFs. unstructured handles docx, pptx and txt.
 # We avoid unstructured[pdf] on purpose: it drags in torch and layout models,

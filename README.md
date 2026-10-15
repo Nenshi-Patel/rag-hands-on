@@ -136,6 +136,32 @@ never need to touch it.
 
 ---
 
+## 📊 Report Q&A — GPO Annual Report
+
+`gpo_annual_report.py` is a separate app. Upload one PDF, ask questions, get short answers from that document only.
+Built for plain-text reports like the GPO 2018 Annual Report.
+
+```bash
+.venv/bin/python -m streamlit run gpo_annual_report.py
+```
+
+What it does differently from HealthTrace:
+
+1. **Whole sentences** — line breaks are removed, so chunks are cut at sentence ends (600 characters, 100 overlap).
+2. **Hybrid search** — meaning (FAISS) plus exact words (BM25), merged by rank. Numbers and names like "FDsys" match exactly.
+3. **Grounded answers** — the AI answers only from the passages, or says "I could not find this in the document."
+
+> **First upload takes ~5 minutes.** The free tier allows 100 embeddings per minute, so pieces are embedded
+> 90 at a time with a 1-minute pause. The result is saved in `indexes/`, so the same PDF loads instantly next time.
+
+**Try asking:**
+
+* *How many depository libraries did GPO staff visit in FY 2018?*
+* *What new digital system replaced FDsys, and when was it fully deployed?*
+* *How much did GPO procure in printing and information products in FY 2018 on behalf of federal agencies?*
+
+---
+
 ## 💡 Good to know
 
 * **Free tier limits** — 1000 embedding calls per day, 100 per minute. A 50-page document is roughly 60 chunks, so one index build uses 60.
