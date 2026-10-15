@@ -162,6 +162,39 @@ What it does differently from HealthTrace:
 
 ---
 
+## 🌍 Long Report Q&A — World Bank Global Economic Prospects
+
+`global_economic_prospects.py` is a separate app for long reports with chapters and sections, like the
+200-page World Bank Global Economic Prospects (June 2026). It keeps facts from one region or chapter
+from mixing with another.
+
+```bash
+.venv/bin/python -m streamlit run global_economic_prospects.py
+```
+
+What it adds on top of the GPO app:
+
+1. **Structure from bookmarks** — the PDF's bookmarks label every page, e.g. `Ch. 2 Regional Outlooks > South Asia`.
+2. **Skips noise** — covers, contents, citation lists and the Statistical Annex tables are not indexed (150 of 200 pages kept).
+3. **Repairs text** — joined letters like `ﬂ` become `fl`, and broken `7T_he` becomes `The`.
+4. **Heading on every chunk** — each chunk starts with its section, so text that says "SAR" is also found for "South Asia".
+5. **Routing** — if a question names regions, "Chapter N" or the executive summary, only chunks from there are used.
+6. **Bigger chunks** — 1000 characters, 150 overlap, so the report fits the free daily limit (~740 chunks).
+
+> **First upload takes ~10 minutes, and can pause for a day.** Progress is saved after every batch in `indexes/`.
+> If the free daily limit (1000 embeddings) stops it, upload the same PDF again after the limit resets and it continues.
+
+**Try asking:**
+
+* *What is the growth outlook for South Asia in this report?*
+* *What does Chapter 3 say about sovereign debt in developing economies?*
+* *According to the executive summary, what are the main risks to the global outlook?*
+* *Compare growth in South Asia and Sub-Saharan Africa.*
+
+Numbers that live only in tables and charts are not covered here — that is Use Case 3.
+
+---
+
 ## 💡 Good to know
 
 * **Free tier limits** — 1000 embedding calls per day, 100 per minute. A 50-page document is roughly 60 chunks, so one index build uses 60.
