@@ -1,69 +1,31 @@
-# 🩺 HealthTrace
+# 🧪 RAG Hands-On
 
-HealthTrace is a Streamlit chatbot that reads your **medical reports** — blood tests, scan reports, prescriptions — and answers your questions about them in plain language. Built with **LangChain**, **Google Gemini** and **FAISS**.
+Hands-on **RAG** (Retrieval-Augmented Generation) apps built with **LangChain**, **Google Gemini** and **FAISS**.
+Upload a document, ask a question, and get an answer taken only from that document.
 
-Upload a report and ask *"is my haemoglobin low?"* or *"what should I eat for this?"* instead of searching every value yourself.
+## 📦 Sub-projects
 
-It handles PDFs, Word files, slides, plain text and pictures. Scanned reports with no text inside are read by Gemini's vision, so a phone photo of a lab printout works. You can type your question or speak it.
+This repo holds separate sub-projects. Each one is its own Streamlit app, handles one kind of
+document, and practises one RAG skill. They all share one setup.
 
-> Not medical advice. It reads your documents and explains them. Decisions belong with your doctor.
-
----
-
-## ✨ Features
-
-* **Attach with the paperclip** — upload straight from the chat box, one file or several
-* **Many file types** — pdf, docx, pptx, txt, png, jpg, jpeg
-* **Reads scans and photos** — a page with no text layer is turned into a picture and read by the AI
-* **Ask by voice** — a microphone sits inside the chat box
-* **Remembers the chat** — follow-up questions like "and the other one?" work
-* **Any language** — ask in Gujarati or Hindi about an English document, and get the answer back in your language
-* **Always-on documents** — an optional file in `documents/` is loaded at startup, on top of anything you attach
-* **Answers from many files at once** — an image and a PDF are searched together
-* **Pays once per file** — reading and embedding are cached, so asking again is free
-
----
-
-## 🛠 Tech Stack
-
-| Purpose | Tool |
-|---|---|
-| Web page | Streamlit |
-| AI framework | LangChain |
-| Chat + vision + speech | Google Gemini (`gemini-3.5-flash-lite`) |
-| Embeddings | Google (`gemini-embedding-001`) |
-| Vector search | FAISS |
-| PDF text | pypdf |
-| PDF page to image | pypdfium2 |
-| Word, slides, text | unstructured |
-
----
-
-## 🔄 How it works
-
-```
-your files ──► text ──► chunks ──► embeddings ──► FAISS
-                                                    │
-your question ──────────────► embedding ──► closest chunks
-                                                    │
-                            chat history + chunks ──► Gemini ──► answer
-```
-
-1. **Read** — text comes straight out of normal PDFs and Word files. Scans, photos and audio go to Gemini.
-2. **Chunk** — the text is cut into 1000-character pieces with 150 characters of overlap, so no sentence is lost at a join.
-3. **Embed** — every piece becomes a list of numbers, so searching works by meaning, not by exact words. This is what lets a Gujarati question find English text.
-4. **Search** — your question becomes numbers too, and the closest pieces are pulled out.
-5. **Answer** — those pieces plus the whole chat history go to Gemini.
+| Sub-project | File | Document | Skill |
+|---|---|---|---|
+| 🩺 **HealthTrace** | `health_trace.py` | Your medical reports: PDFs, scans, photos, Word, slides | Reading any file type, voice questions, chat memory |
+| 📊 **Report Q&A — GPO Annual Report** | `gpo_annual_report.py` | GPO 2018 Annual Report, 82 pages | Plain text: whole-sentence chunks, hybrid search, grounded answers |
+| 🌍 **Long Report Q&A — World Bank Global Economic Prospects** | `global_economic_prospects.py` | World Bank, June 2026, 200 pages | Long and structured: sections from bookmarks, routing by region and chapter |
+| 🍎 **iMac Environmental Report** — *coming soon* | — | Apple, 11 pages | Facts in charts, tables and footnotes |
 
 ---
 
 ## 🚀 Setup
 
+All sub-projects share one setup.
+
 **1. Clone the repository**
 
 ```bash
-git clone https://github.com/Nenshi-Patel/health-trace-chatbot.git
-cd health-trace-chatbot
+git clone https://github.com/Nenshi-Patel/rag-hands-on.git
+cd rag-hands-on
 ```
 
 **2. Create a virtual environment** (Python 3.12)
@@ -90,15 +52,73 @@ Open `.env` and paste your key. Get a free one at [Google AI Studio](https://ais
 GOOGLE_API_KEY=your_key_here
 ```
 
-**5. Run it**
+**5. Run a sub-project** — each section below has its own command, for example:
+
+```bash
+.venv/bin/python -m streamlit run gpo_annual_report.py
+```
+
+---
+
+## 🛠 Tech Stack
+
+| Purpose | Tool |
+|---|---|
+| Web page | Streamlit |
+| AI framework | LangChain |
+| Chat + vision + speech | Google Gemini (`gemini-3.5-flash-lite`) |
+| Embeddings | Google (`gemini-embedding-001`) |
+| Vector search | FAISS |
+| Keyword search | BM25 (`rank_bm25`) |
+| PDF text | pypdf |
+| PDF page to image | pypdfium2 |
+| Word, slides, text | unstructured |
+
+---
+
+## 🩺 HealthTrace
+
+HealthTrace is a Streamlit chatbot that reads your **medical reports** — blood tests, scan reports, prescriptions — and answers your questions about them in plain language.
+
+Upload a report and ask *"is my haemoglobin low?"* or *"what should I eat for this?"* instead of searching every value yourself.
+
+It handles PDFs, Word files, slides, plain text and pictures. Scanned reports with no text inside are read by Gemini's vision, so a phone photo of a lab printout works. You can type your question or speak it.
 
 ```bash
 .venv/bin/python -m streamlit run health_trace.py
 ```
 
----
+> Not medical advice. It reads your documents and explains them. Decisions belong with your doctor.
 
-## 📄 Sample document included
+### ✨ Features
+
+* **Attach with the paperclip** — upload straight from the chat box, one file or several
+* **Many file types** — pdf, docx, pptx, txt, png, jpg, jpeg
+* **Reads scans and photos** — a page with no text layer is turned into a picture and read by the AI
+* **Ask by voice** — a microphone sits inside the chat box
+* **Remembers the chat** — follow-up questions like "and the other one?" work
+* **Any language** — ask in Gujarati or Hindi about an English document, and get the answer back in your language
+* **Always-on documents** — an optional file in `documents/` is loaded at startup, on top of anything you attach
+* **Answers from many files at once** — an image and a PDF are searched together
+* **Pays once per file** — reading and embedding are cached, so asking again is free
+
+### 🔄 How it works
+
+```
+your files ──► text ──► chunks ──► embeddings ──► FAISS
+                                                    │
+your question ──────────────► embedding ──► closest chunks
+                                                    │
+                            chat history + chunks ──► Gemini ──► answer
+```
+
+1. **Read** — text comes straight out of normal PDFs and Word files. Scans, photos and audio go to Gemini.
+2. **Chunk** — the text is cut into 1000-character pieces with 150 characters of overlap, so no sentence is lost at a join.
+3. **Embed** — every piece becomes a list of numbers, so searching works by meaning, not by exact words. This is what lets a Gujarati question find English text.
+4. **Search** — your question becomes numbers too, and the closest pieces are pulled out.
+5. **Answer** — those pieces plus the whole chat history go to Gemini.
+
+### 📄 Sample document included
 
 The repo ships with **Complete_Diet_and_Nutrition_Guide.pdf** in `documents/`, so the app works the moment you run it. It answers the question *"I am low on X — what should I eat?"*
 
@@ -118,9 +138,7 @@ Each section lists the foods to eat, the amounts, what blocks absorption, and wh
 * *What should I avoid with high uric acid?*
 * *મારે આયર્ન વધારવા શું ખાવું જોઈએ?*
 
----
-
-## 📎 Adding your own documents
+### 📎 Adding your own documents
 
 **Normal way — the paperclip.** Click the `+` in the chat box and pick a file, then ask your
 question. Attach several at once if you like. They stay for the whole conversation, so you
