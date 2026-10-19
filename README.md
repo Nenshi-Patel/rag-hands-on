@@ -13,7 +13,7 @@ document, and practises one RAG skill. They all share one setup.
 | 🩺 **HealthTrace** | `health_trace.py` | Your medical reports: PDFs, scans, photos, Word, slides | Reading any file type, voice questions, chat memory |
 | 📊 **Report Q&A — GPO Annual Report** | `gpo_annual_report.py` | GPO 2018 Annual Report, 82 pages | Plain text: whole-sentence chunks, hybrid search, grounded answers |
 | 🌍 **Long Report Q&A — World Bank Global Economic Prospects** | `global_economic_prospects.py` | World Bank, June 2026, 200 pages | Long and structured: sections from bookmarks, routing by region and chapter |
-| 🍎 **iMac Environmental Report** — *coming soon* | — | Apple, 11 pages | Facts in charts, tables and footnotes |
+| 🍎 **Visual Report Q&A — Apple iMac Environmental Report** | `imac_environmental_report.py` | Apple iMac Product Environmental Report, 12 pages | Facts in charts, tables and footnotes: Gemini reads each page as a picture |
 
 ---
 
@@ -209,7 +209,38 @@ What it adds on top of the GPO app:
 * *According to the executive summary, what are the main risks to the global outlook?*
 * *Compare growth in South Asia and Sub-Saharan Africa.*
 
-Numbers that live only in tables and charts are not covered here — that is Use Case 3.
+Numbers that live only in tables and charts are not covered here — see Visual Report Q&A below.
+
+---
+
+## 🍎 Visual Report Q&A — Apple iMac Environmental Report
+
+`imac_environmental_report.py` is a separate app for short reports whose facts sit in charts, tables, icons
+and footnotes instead of sentences, like Apple's 12-page iMac Product Environmental Report.
+
+```bash
+.venv/bin/python -m streamlit run imac_environmental_report.py
+```
+
+What it adds on top of the GPO app:
+
+1. **Gemini reads every page as a picture** — together with the page's raw text, so numbers are copied exactly.
+2. **One fact per line** — every table row keeps its column names, every chart number keeps its meaning,
+   and icon call-outs become sentences.
+3. **Footnotes travel with the claim** — the endnotes are handed to Gemini, so a note's caveat is written
+   right after the fact it belongs to.
+4. **Chunks by whole lines** — a fact or table row is never cut in half.
+5. **Read once** — the facts are saved as `indexes/<file>.json`, so the 12 picture readings happen only once.
+
+> **First upload takes ~3 minutes:** 12 Gemini picture readings, then about 80 chunks to embed.
+> The picture readings use the chat limit, not the embedding limit.
+
+**Try asking:**
+
+* *How much less energy does iMac use compared to the ENERGY STAR requirement?*
+* *What is the total carbon footprint of the iMac, and how much of that comes from product use versus manufacturing?*
+* *What material is the iMac stand made from, and what percentage of it is recycled?*
+* *What is the iMac's power use in sleep mode at 230V?*
 
 ---
 
